@@ -16,7 +16,7 @@ const { ...meta } = Astro.props;
     <title>{meta.title}</title>
     <ThemeScript />
     <Fonts />
-    <link rel="icon" href={`${import.meta.env.BASE_URL}favicon.svg`} type="image/svg+xml" />
+    <link rel="icon" href={`${import.meta.env.BASE_URL}/favicon.svg`} type="image/svg+xml" />
     <MetaTags {...meta} />
     <slot name="head" />
   </head>
