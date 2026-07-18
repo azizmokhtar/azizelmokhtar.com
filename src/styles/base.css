@@ -1,3 +1,7 @@
+html {
+  color-scheme: light dark;
+}
+
 *::selection {
   @apply bg-green-5a;
 }
