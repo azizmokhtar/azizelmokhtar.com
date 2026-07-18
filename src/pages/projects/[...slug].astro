@@ -81,7 +81,7 @@ const tocHeadings = headings.filter((h) => h.depth === 3);
         <ul class="!pl-0 dashed">
           {project.data.related.map((r) => (
             <li>
-              <a href={r.url} class="hover:text-green-11 transition-colors">{r.title}</a>
+              <a href={`${import.meta.env.BASE_URL}${r.url}`} class="hover:text-green-11 transition-colors">{r.title}</a>
               <div class="dash" />
             </li>
           ))}

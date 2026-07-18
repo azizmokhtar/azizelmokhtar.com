@@ -19,7 +19,7 @@ const { experiences } = Astro.props;
   {experiences.map((exp) => (
     <li class="flex flex-col gap-1.5">
       <div class="flex items-baseline gap-2 flex-wrap">
-        <a href={`/experience/${exp.id}`} class="font-medium hover:text-green-11 transition-colors !decoration-none">
+        <a href={`${import.meta.env.BASE_URL}/experience/${exp.id}`} class="font-medium hover:text-green-11 transition-colors !decoration-none">
           {exp.data.role}
           <em class="text-green-11 not-italic font-normal"> · {exp.data.company}</em>
         </a>

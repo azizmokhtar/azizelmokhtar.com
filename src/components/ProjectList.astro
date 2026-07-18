@@ -18,7 +18,7 @@ const { projects } = Astro.props;
 <ul class="!pl-0 dashed">
   {projects.map((project) => (
     <li>
-      <a href={`/projects/${project.id}`} class="!decoration-none hover:text-green-11 transition-colors">
+      <a href={`${import.meta.env.BASE_URL}/projects/${project.id}`} class="!decoration-none hover:text-green-11 transition-colors">
         {project.data.title}
       </a>
       <span class="text-xs text-green-11 font-mono ml-2">{project.data.kind}</span>

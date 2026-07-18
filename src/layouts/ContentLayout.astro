@@ -16,6 +16,7 @@ export type Props = {
 };
 
 const { backHref = "/", backLabel = "Home", headings = [], ...meta } = Astro.props;
+const backHrefPrefixed = `${import.meta.env.BASE_URL}${backHref}`;
 ---
 
 <BaseLayout {...meta}>
@@ -26,7 +27,7 @@ const { backHref = "/", backLabel = "Home", headings = [], ...meta } = Astro.pro
       <aside class="w-full h-full mx-auto xl:sticky xl:top-0 xl:left-0 xl:max-w-sm">
         <div class="flex flex-col xl:min-h-svh px-4 pt-5 lg:pt-10 xl:py-10 xl:pl-10 xl:pr-5">
           <nav class="hidden xl:block">
-            <a href={backHref} class="styled font-sans">
+            <a href={backHrefPrefixed} class="styled font-sans">
               <Icon
                 name="material-symbols:arrow-back"
                 class="inline-block align-middle"
@@ -44,7 +45,7 @@ const { backHref = "/", backLabel = "Home", headings = [], ...meta } = Astro.pro
       </aside>
       <main class="flex-shrink-0 max-w-3xl px-4 my-10 overflow-hidden w-full h-full mx-auto">
         <div class="flex items-center justify-between xl:justify-end mb-4">
-          <a href={backHref} class="styled font-sans text-base xl:hidden hover:text-green-11 transition-colors">
+          <a href={backHrefPrefixed} class="styled font-sans text-base xl:hidden hover:text-green-11 transition-colors">
             <Icon
               name="material-symbols:arrow-back"
               class="inline-block align-middle"
