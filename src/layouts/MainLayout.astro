@@ -1,0 +1,37 @@
+---
+import "@/styles/prose.css";
+import BaseLayout from "./BaseLayout.astro";
+
+export type Props = {
+  title: string;
+  description?: string;
+};
+const { ...meta } = Astro.props;
+---
+
+<BaseLayout {...meta}>
+  <slot name="head" slot="head" />
+  <div class="w-full h-full max-w-full">
+    <div
+      class="layout relative w-full h-full mx-auto max-w-[96rem] flex flex-col xl:flex-row xl:gap-5"
+    >
+      <aside class="w-full h-full mx-auto xl:sticky xl:top-0 xl:left-0 xl:max-w-sm">
+        <div class="flex flex-col xl:min-h-svh">
+          <slot name="aside-left" />
+        </div>
+      </aside>
+      <main class="flex-shrink-0 max-w-3xl px-4 my-10 overflow-hidden w-full h-full mx-auto">
+        <section>
+          <slot name="title" />
+        </section>
+        <article class="prose">
+          <slot name="article" />
+        </article>
+        <section>
+          <slot name="footnotes" />
+        </section>
+      </main>
+      <aside class="w-full h-full mx-auto xl:sticky xl:top-0 xl:right-0 xl:max-w-sm" />
+    </div>
+  </div>
+</BaseLayout>

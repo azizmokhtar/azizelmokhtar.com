@@ -1,0 +1,82 @@
+---
+import "@/styles/prose.css";
+import type { MarkdownHeading } from "astro";
+import BaseLayout from "./BaseLayout.astro";
+import TOC from "@/components/TOC.astro";
+import TOCScript from "@/components/TOCScript.astro";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import { Icon } from "astro-icon/components";
+
+export type Props = {
+  title: string;
+  description?: string;
+  backHref?: string;
+  backLabel?: string;
+  headings?: MarkdownHeading[];
+};
+
+const { backHref = "/", backLabel = "Home", headings = [], ...meta } = Astro.props;
+---
+
+<BaseLayout {...meta}>
+  {headings.length > 0 && <TOCScript slot="head" />}
+
+  <div class="w-full h-full max-w-full">
+    <div class="layout relative w-full h-full mx-auto max-w-[96rem] flex flex-col xl:flex-row xl:gap-5">
+      <aside class="w-full h-full mx-auto xl:sticky xl:top-0 xl:left-0 xl:max-w-sm">
+        <div class="flex flex-col xl:min-h-svh px-4 pt-5 lg:pt-10 xl:py-10 xl:pl-10 xl:pr-5">
+          <nav class="hidden xl:block">
+            <a href={backHref} class="styled font-sans">
+              <Icon
+                name="material-symbols:arrow-back"
+                class="inline-block align-middle"
+              />
+              <span>{backLabel}</span>
+            </a>
+          </nav>
+          <div class="flex-1"></div>
+          {headings.length > 0 && (
+            <div class="hidden xl:block">
+              <TOC headings={headings} />
+            </div>
+          )}
+        </div>
+      </aside>
+      <main class="flex-shrink-0 max-w-3xl px-4 my-10 overflow-hidden w-full h-full mx-auto">
+        <div class="flex items-center justify-between xl:justify-end mb-4">
+          <a href={backHref} class="styled font-sans text-base xl:hidden hover:text-green-11 transition-colors">
+            <Icon
+              name="material-symbols:arrow-back"
+              class="inline-block align-middle"
+            />
+            <span>{backLabel}</span>
+          </a>
+          <div class="flex items-center gap-3">
+            <ThemeToggle />
+          </div>
+        </div>
+        <slot name="title" />
+        <article class="prose max-w-none">
+          <slot name="article" />
+        </article>
+        <div class="block xl:hidden mt-10">
+          {headings.length > 0 && (
+            <div class="border-t border-gray-6 pt-6">
+              <TOC headings={headings} />
+            </div>
+          )}
+        </div>
+        <slot name="footnotes" />
+      </main>
+    </div>
+  </div>
+</BaseLayout>
+
+<style scoped>
+  .styled {
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+</style>

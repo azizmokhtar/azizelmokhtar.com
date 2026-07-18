@@ -1,0 +1,45 @@
+---
+import { getCollection, render } from "astro:content";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+
+export async function getStaticPaths() {
+  const tutorials = await getCollection("tutorials");
+  return tutorials.map((t) => ({
+    params: { slug: t.id },
+  }));
+}
+
+const { slug } = Astro.params;
+const allTutorials = await getCollection("tutorials");
+const tutorial = allTutorials.find((t) => t.id === slug);
+if (!tutorial) throw new Error(`Tutorial not found: ${slug}`);
+
+const { Content, headings } = await render(tutorial);
+const tocHeadings = headings.filter((h) => h.depth === 3);
+---
+
+<ContentLayout
+  title={tutorial.data.title}
+  description={tutorial.data.description}
+  backHref="/"
+  backLabel="Home"
+  headings={tocHeadings}
+>
+  <Fragment slot="title">
+    <header class="mb-10">
+      <h1 class="font-sans font-semibold text-3xl">{tutorial.data.title}</h1>
+      <p class="text-gray-11 text-lg mt-2">{tutorial.data.description}</p>
+      {tutorial.data.tags.length > 0 && (
+        <div class="flex gap-2 mt-3 flex-wrap">
+          {tutorial.data.tags.map((t) => (
+            <span class="text-xs bg-gray-3 px-2 py-0.5 rounded font-mono text-gray-11">{t}</span>
+          ))}
+        </div>
+      )}
+    </header>
+  </Fragment>
+
+  <Fragment slot="article">
+    <Content />
+  </Fragment>
+</ContentLayout>

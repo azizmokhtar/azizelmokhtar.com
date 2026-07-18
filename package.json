@@ -1,0 +1,25 @@
+{
+  "name": "portfolio",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro check && astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.7.3",
+    "@fontsource-variable/source-serif-4": "^5.1.1",
+    "@fontsource/geist": "^5.0.1",
+    "@iconify-json/material-symbols": "^1.2.14",
+    "@iconify-json/simple-icons": "^1.2.23",
+    "astro": "^5.2.5",
+    "astro-icon": "^1.1.5",
+    "unocss": "^65.4.3",
+    "unocss-preset-radix-colors": "^0.2.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^7.0.2"
+  }
+}

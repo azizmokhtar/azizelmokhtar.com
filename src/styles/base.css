@@ -1,0 +1,26 @@
+*::selection {
+  @apply bg-green-5a;
+}
+
+ul.dashed li {
+  @apply flex flex-row mb-1 w-full leading-normal;
+}
+
+ul.dashed li .dash {
+  @apply flex-grow border-dashed border-gray-6 border-t-2 mt-3.5 mx-3;
+}
+
+ul.dashed li > * {
+  display: block;
+  position: relative;
+}
+
+ul.dashed li > *:nth-child(1) {
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+ul.dashed li > *:last-child {
+  flex-shrink: 0;
+  white-space: nowrap;
+}

@@ -1,0 +1,55 @@
+---
+import { getCollection, render } from "astro:content";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+
+export async function getStaticPaths() {
+  const experiences = await getCollection("experience");
+  return experiences.map((exp) => ({
+    params: { slug: exp.id },
+  }));
+}
+
+const { slug } = Astro.params;
+const allExperiences = await getCollection("experience");
+const exp = allExperiences.find((e) => e.id === slug);
+if (!exp) throw new Error(`Experience not found: ${slug}`);
+
+const { Content, headings } = await render(exp);
+const tocHeadings = headings.filter((h) => h.depth === 3);
+---
+
+<ContentLayout
+  title={`${exp.data.role} at ${exp.data.company}`}
+  description={`${exp.data.role} at ${exp.data.company}`}
+  backHref="/"
+  backLabel="Home"
+  headings={tocHeadings}
+>
+  <Fragment slot="title">
+    <header class="mb-10">
+      <h1 class="font-sans font-semibold text-3xl mb-1">
+        {exp.data.role}
+      </h1>
+      <p class="text-xl text-green-11 font-serif">
+        {exp.data.company}
+        <span class="text-gray-11 text-base font-sans ml-3">
+          {exp.data.startDate}
+          {exp.data.endDate ? ` — ${exp.data.endDate}` : " — Present"}
+        </span>
+      </p>
+      {exp.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-2 mt-4">
+          {exp.data.tags.map((t) => (
+            <span class="text-xs bg-green-3 text-green-11 px-2.5 py-0.5 rounded-full font-mono">
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
+    </header>
+  </Fragment>
+
+  <Fragment slot="article">
+    <Content />
+  </Fragment>
+</ContentLayout>

@@ -1,0 +1,28 @@
+---
+import "@/styles/base.css";
+import Fonts from "@/components/Fonts.astro";
+import MetaTags, { type Props as MetaTagsProps } from "@/components/MetaTags.astro";
+import ThemeScript from "@/components/ThemeScript.astro";
+
+type Props = MetaTagsProps;
+const { ...meta } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" transition:name="root" transition:animate="none">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>{meta.title}</title>
+    <ThemeScript />
+    <Fonts />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <MetaTags {...meta} />
+    <slot name="head" />
+  </head>
+  <body
+    class="font-serif antialiased text-[1.1875rem] leading-normal bg-gray-1 text-gray-12 w-full h-full"
+  >
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,59 @@
+<script>
+  let observer;
+  let onResize;
+
+  function setup() {
+    if (observer) {
+      observer.disconnect();
+      observer = undefined;
+    }
+    if (onResize) {
+      window.removeEventListener("resize", onResize);
+      onResize = undefined;
+    }
+
+    const toc = document.querySelector("#toc");
+    if (!toc) return;
+
+    let currentAnchor = toc.querySelector('a[aria-current="true"]');
+    const setCurrentAnchor = (target) => {
+      if (target === currentAnchor) return;
+      if (currentAnchor) currentAnchor.removeAttribute("aria-current");
+      target.setAttribute("aria-current", "true");
+      currentAnchor = target;
+    };
+
+    const links = [...toc.querySelectorAll("a")];
+    const headings = [...document.querySelectorAll("article h2, article h3")];
+
+    const onIntersect = (entries) => {
+      for (const { isIntersecting, target } of entries) {
+        if (!isIntersecting) continue;
+        const id = target.getAttribute("id");
+        if (!id) continue;
+        const link = links.find((l) => l.hash === `#${encodeURIComponent(id)}`);
+        if (link) {
+          setCurrentAnchor(link);
+          break;
+        }
+      }
+    };
+
+    const observe = () => {
+      if (observer) observer.disconnect();
+      observer = new IntersectionObserver(onIntersect, { threshold: 1 });
+      headings.forEach((h) => observer.observe(h));
+    };
+
+    requestAnimationFrame(() => observe());
+
+    let timeout;
+    onResize = () => {
+      clearTimeout(timeout);
+      timeout = setTimeout(() => observe(), 200);
+    };
+    window.addEventListener("resize", onResize);
+  }
+
+  document.addEventListener("astro:page-load", setup);
+</script>

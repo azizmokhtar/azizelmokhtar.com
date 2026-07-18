@@ -1,0 +1,94 @@
+---
+import { getCollection, getEntry } from "astro:content";
+import ExperienceList from "@/components/ExperienceList.astro";
+import ProjectList from "@/components/ProjectList.astro";
+import LinkIcons from "@/components/LinkIcons.astro";
+import ThemeToggle from "@/components/ThemeToggle.astro";
+import MainLayout from "@/layouts/MainLayout.astro";
+
+const siteMeta = await getEntry("site", "meta");
+if (!siteMeta) throw new Error("Missing site/meta");
+
+const allProjects = await getCollection("projects");
+const sortedProjects = allProjects.sort((a, b) => b.data.order - a.data.order);
+
+const allExperience = await getCollection("experience");
+const sortedExperiences = allExperience.sort((a, b) => b.data.order - a.data.order);
+---
+
+<MainLayout title={siteMeta.data.title} description={siteMeta.data.description}>
+  <Fragment slot="aside-left">
+    <div class="flex-1"></div>
+    <div class="hidden xl:block px-10 pb-10">
+      <LinkIcons links={siteMeta.data.links} />
+    </div>
+  </Fragment>
+
+  <Fragment slot="title">
+    <div class="flex flex-row items-end gap-5 pb-3 xl:pb-5">
+      <img src="/me_black.svg" class="h-28 w-auto aspect-square dark:hidden" />
+      <img src="/me_white.svg" class="h-28 w-auto aspect-square hidden dark:block" />
+      <div class="flex flex-col flex-1">
+          <div class="flex items-center justify-between">
+          <h2 class="font-semibold text-2xl">{siteMeta.data.title}</h2>
+          <div class="flex items-center gap-1.5">
+            <ThemeToggle />
+          </div>
+        </div>
+        <div class="flex flex-row items-center gap-2.5 text-gray-11 font-sans">
+          <span>{siteMeta.data.description}</span>
+        </div>
+      </div>
+    </div>
+  </Fragment>
+
+  <Fragment slot="article">
+    <p>
+      I'm a computer science student who spends most of his time thinking
+      about machine learning, financial systems, and software that actually
+      ships. I believe in clean code, clear thinking, and projects that
+      solve real problems.
+    </p>
+    <p>
+      Whether it's training a transformer on market data or building a
+      full-stack app from scratch, I'm driven by curiosity and the
+      satisfaction of making something that didn't exist before.
+    </p>
+    <p class="text-gray-11">
+      I'm currently open to internships and research collaborations.
+    </p>
+    <hr />
+
+    <h3>Experience</h3>
+    <ExperienceList experiences={sortedExperiences} />
+
+    <h3>Projects</h3>
+    <ProjectList projects={sortedProjects} />
+
+    <h3>Outside Work</h3>
+    <p class="text-gray-11">
+      When I'm not coding, I run, read, train kickboxing, and occasionally
+      lose at chess. Working toward my first half-marathon and always
+      looking for book recommendations.
+    </p>
+  </Fragment>
+
+  <Fragment slot="footnotes">
+    <div class="h-20"></div>
+    <div class="w-full flex flex-row items-end justify-between">
+      <div class="flex flex-col gap-5 xl:gap-0">
+        <div class="prose">
+          <span class="italic text-gray-11"
+            >© {new Date().getFullYear()} {siteMeta.data.title}</span
+          >
+        </div>
+        <div class="text-gray-11 hidden xl:block">
+          Built with Astro + UnoCSS
+        </div>
+        <div class="block xl:hidden">
+          <LinkIcons links={siteMeta.data.links} />
+        </div>
+      </div>
+    </div>
+  </Fragment>
+</MainLayout>

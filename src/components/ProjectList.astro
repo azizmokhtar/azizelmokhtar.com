@@ -1,0 +1,31 @@
+---
+export type Props = {
+  projects: Array<{
+    id: string;
+    data: {
+      title: string;
+      kind: string;
+      year: number;
+      url?: string;
+      repo?: string;
+    };
+  }>;
+};
+
+const { projects } = Astro.props;
+---
+
+<ul class="!pl-0 dashed">
+  {projects.map((project) => (
+    <li>
+      <a href={`/projects/${project.id}`} class="!decoration-none hover:text-green-11 transition-colors">
+        {project.data.title}
+      </a>
+      <span class="text-xs text-green-11 font-mono ml-2">{project.data.kind}</span>
+      <div class="dash" />
+      <div class="text-gray-11 flex items-center gap-2">
+        <span>{project.data.year}</span>
+      </div>
+    </li>
+  ))}
+</ul>

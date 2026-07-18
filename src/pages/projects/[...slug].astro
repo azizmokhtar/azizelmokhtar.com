@@ -1,0 +1,92 @@
+---
+import { getCollection, render } from "astro:content";
+import ContentLayout from "@/layouts/ContentLayout.astro";
+
+export async function getStaticPaths() {
+  const projects = await getCollection("projects");
+  return projects.map((project) => ({
+    params: { slug: project.id },
+  }));
+}
+
+const { slug } = Astro.params;
+const allProjects = await getCollection("projects");
+const project = allProjects.find((p) => p.id === slug);
+if (!project) throw new Error(`Project not found: ${slug}`);
+
+const { Content, headings } = await render(project);
+const tocHeadings = headings.filter((h) => h.depth === 3);
+---
+
+<ContentLayout
+  title={project.data.title}
+  description={project.data.description}
+  backHref="/"
+  backLabel="Home"
+  headings={tocHeadings}
+>
+  <Fragment slot="title">
+    <header class="mb-10">
+      <div class="flex items-center gap-3 mb-2 flex-wrap">
+        <h1 class="font-sans font-semibold text-3xl">{project.data.title}</h1>
+        <span class="text-xs bg-green-3 text-green-11 px-2.5 py-0.5 rounded-full font-mono">
+          {project.data.kind}
+        </span>
+      </div>
+      <p class="text-gray-11 text-lg">{project.data.description}</p>
+      <div class="flex items-center gap-3 mt-3 text-sm text-gray-11 font-sans flex-wrap">
+        <span>{project.data.year}</span>
+        {project.data.tech.length > 0 && (
+          <>
+            <span class="text-gray-8">·</span>
+            {project.data.tech.map((t) => (
+              <span class="bg-gray-3 px-2 py-0.5 rounded font-mono text-xs">{t}</span>
+            ))}
+          </>
+        )}
+      </div>
+      <div class="flex gap-3 mt-3">
+        {project.data.repo && (
+          <a
+            href={project.data.repo}
+            class="text-sm text-green-11 hover:underline font-sans"
+            target="_blank"
+            rel="noreferrer"
+          >
+            source code ↗
+          </a>
+        )}
+        {project.data.url && (
+          <a
+            href={project.data.url}
+            class="text-sm text-green-11 hover:underline font-sans"
+            target="_blank"
+            rel="noreferrer"
+          >
+            live site ↗
+          </a>
+        )}
+      </div>
+    </header>
+  </Fragment>
+
+  <Fragment slot="article">
+    <Content />
+  </Fragment>
+
+  <Fragment slot="footnotes">
+    {project.data.related.length > 0 && (
+      <section class="mt-16 pt-8 border-t border-gray-6">
+        <h2 class="font-sans font-semibold text-lg mb-4">Related Posts</h2>
+        <ul class="!pl-0 dashed">
+          {project.data.related.map((r) => (
+            <li>
+              <a href={r.url} class="hover:text-green-11 transition-colors">{r.title}</a>
+              <div class="dash" />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )}
+  </Fragment>
+</ContentLayout>

@@ -1,0 +1,40 @@
+---
+export type Props = {
+  experiences: Array<{
+    id: string;
+    data: {
+      role: string;
+      company: string;
+      startDate: string;
+      endDate?: string;
+      tags: string[];
+    };
+  }>;
+};
+
+const { experiences } = Astro.props;
+---
+
+<ul class="!pl-0 flex flex-col gap-2 leading-normal">
+  {experiences.map((exp) => (
+    <li class="flex flex-col gap-1.5">
+      <div class="flex items-baseline gap-2 flex-wrap">
+        <a href={`/experience/${exp.id}`} class="font-medium hover:text-green-11 transition-colors !decoration-none">
+          {exp.data.role}
+          <em class="text-green-11 not-italic font-normal"> · {exp.data.company}</em>
+        </a>
+        <span class="text-sm text-gray-11 font-sans">
+          {exp.data.startDate}
+          {exp.data.endDate ? ` — ${exp.data.endDate}` : " — Present"}
+        </span>
+      </div>
+      {exp.data.tags.length > 0 && (
+        <div class="flex flex-wrap gap-x-2 text-xs text-gray-11 font-mono">
+          {exp.data.tags.map((t, i) => (
+            <span>{i > 0 && <span class="mr-2">—</span>}{t}</span>
+          ))}
+        </div>
+      )}
+    </li>
+  ))}
+</ul>
